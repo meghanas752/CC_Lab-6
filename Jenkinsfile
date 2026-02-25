@@ -13,8 +13,8 @@ pipeline {
     steps {
         sh '''
         docker rm -f backend1 backend2 || true
-        docker run -d -p 8081:8080 --name backend1 backend-app
-        docker run -d -p 8082:8080 --name backend2 backend-app
+        docker run -d --network lab-network --name backend1 backend-app
+        docker run -d --network lab-network --name backend2 backend-app
         '''
     }
 }
@@ -24,7 +24,7 @@ pipeline {
         sh '''
         docker rm -f nginx || true
         docker build -t nginx-app nginx
-        docker run -d -p 80:80 --name nginx nginx-app
+        docker run -d --network lab-network -p 80:80 --name nginx nginx-app
         '''
     }
 }
