@@ -25,9 +25,14 @@ int main() {
         char hostname[1024];
         gethostname(hostname, 1024);
 
+        std::string body = "Served by backend: " + std::string(hostname);
+
         std::string response =
-            "HTTP/1.1 200 OK\nContent-Type: text/plain\n\n"
-            "Served by backend: " + std::string(hostname);
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            "Content-Length: " + std::to_string(body.length()) + "\r\n"
+            "\r\n" +
+            body;
 
         send(new_socket, response.c_str(), response.length(), 0);
         close(new_socket);
