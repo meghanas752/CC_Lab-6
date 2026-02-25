@@ -22,9 +22,12 @@ int main() {
     while (true) {
         new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
 
+        char hostname[1024];
+        gethostname(hostname, 1024);
+
         std::string response =
             "HTTP/1.1 200 OK\nContent-Type: text/plain\n\n"
-            "Served by backend: " + std::to_string(getpid());
+            "Served by backend: " + std::string(hostname);
 
         send(new_socket, response.c_str(), response.length(), 0);
         close(new_socket);
