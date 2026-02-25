@@ -10,23 +10,23 @@ pipeline {
         }
 
         stage('Run Backend Containers') {
-            steps {
-                sh '''
-                docker rm -f backend1 backend2 || true
-                docker run -d --name backend1 backend-app
-                docker run -d --name backend2 backend-app
-                '''
-            }
-        }
+    steps {
+        sh '''
+        docker rm -f backend1 backend2 || true
+        docker run -d -p 8081:8080 --name backend1 backend-app
+        docker run -d -p 8082:8080 --name backend2 backend-app
+        '''
+    }
+}
 
         stage('Run NGINX') {
-            steps {
-                sh '''
-                docker rm -f nginx || true
-                docker build -t nginx-app nginx
-                docker run -d -p 80:80 --name nginx nginx-app
-                '''
-            }
-        }
+    steps {
+        sh '''
+        docker rm -f nginx || true
+        docker build -t nginx-app nginx
+        docker run -d -p 80:80 --name nginx nginx-app
+        '''
+    }
+}
     }
 }
